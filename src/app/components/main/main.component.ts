@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FlickImage, FlickrTag } from 'src/app/model/FlickrModels';
+import { FlickrImage, FlickrTag, FlickrProfile } from 'src/app/model/FlickrModels';
 import { FlickrService } from 'src/app/services/flickr.service';
 
 
@@ -12,7 +12,7 @@ const DEFAULT_SEARCH_VALUE = 'banana';
 })
 export class MainComponent implements OnInit {
   // The images from Flickr
-  images: FlickImage[];
+  images: FlickrImage[];
   // The searchString for searching on Flickr
   searchString: string;
 
@@ -21,12 +21,17 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     // Getting data from localStorage or setting the default value
     this.searchString = localStorage.getItem('searchString') ? localStorage.getItem('searchString') : DEFAULT_SEARCH_VALUE;
-    // Getting the images for the given searchString
+    this.getImgs();
+  }
+
+  // Getting the images for the given searchString
+  getImgs(): void {
     this.flickrService.getImages(this.searchString).subscribe(async (imgs) => {
       this.images = imgs.photos.photo;
-      // Getting the tags for each image
+      // Getting the tags & owner data for each image
       for (let img of this.images) {
         img.tags = await this.getTags(img.id);
+        img.theOwner = await this.getUser(img.owner);
       }
     });
   }
@@ -36,12 +41,18 @@ export class MainComponent implements OnInit {
     // Updating localStorage with the new searchString
     localStorage.setItem('searchString', this.searchString);
     // Refetch images
-    this.flickrService.getImages(this.searchString).subscribe(imgs => this.images = imgs.photos.photo);
+    this.getImgs();
   }
 
   // Get tags for a given Image
   async getTags(id: number): Promise<FlickrTag[]> {
     let theTags = await this.flickrService.getTags(id).toPromise();
     return theTags.photo.tags.tag;
+  }
+
+  // Get user's data for a given id
+  async getUser(id: string): Promise<FlickrProfile> {
+    let theUser = await this.flickrService.getProfileData(id).toPromise();
+    return theUser.profile;
   }
 }

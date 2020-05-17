@@ -2,8 +2,6 @@
     <img src="{{ getURI() }}" class="card-img-top" alt="...">
     <div class="card-body">
         <h5 class="card-title"> {{ img.title }} </h5>
-        <h6> {{ displayUser(img.theOwner) }} </h6>
         <div *ngIf="img.tags" [innerHTML]="getTags()"> </div>
-        <a routerLink="/people/{{ img.owner }}"><button class="btn btn-primary mt-2">Owner's profile</button></a>
     </div>
 </div>

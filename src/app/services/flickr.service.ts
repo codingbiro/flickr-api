@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { FlickrSearchResponse, FlickrTagResponse } from '../model/FlickrModels';
+import { FlickrSearchResponse, FlickrTagResponse, FlickrProfileResponse } from '../model/FlickrModels';
 
 // The HTTP request options for the API calls
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   })
 };
 // The API key from Flickr
@@ -23,6 +23,10 @@ export class FlickrService {
   flickrMethodSearch: string = '?method=flickr.photos.search';
   // Get Tags for a Photo method
   flickrMethodTags: string = '?method=flickr.tags.getListPhoto';
+  // Get a user's profile data method
+  flickrMethodProfile: string = '?method=flickr.profile.getProfile';
+  // Get a user's pictures method
+  flickrMethodUserPics: string = '?method=flickr.people.getPublicPhotos';
   // The API KEY
   flickrApiKey: string = `&api_key=${API_KEY}`;
   // Response in JSON format
@@ -47,11 +51,25 @@ export class FlickrService {
     return this.http.get<FlickrTagResponse>(this.flickrUrl + this.flickrMethodTags + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrPhotoId);
   }
 
-  getPage(searchString: string, id: number) {
+  // TODO
+  getPage(searchString: string, id: number): Observable<FlickrSearchResponse> {
     // The search's value
     const flickrSearch: string = `&text=${searchString}`;
     // The page
     const flickrPage: string = `&page=${id}`;
     return this.http.get<FlickrSearchResponse>(this.flickrUrl + this.flickrMethodSearch + this.flickrApiKey + flickrSearch + this.jsonResponse + this.noJsonCb + this.flickrPerPage + flickrPage);
+  }
+
+  // Get profile data for a user
+  getProfileData(id: string): Observable<FlickrProfileResponse> {
+    const flickrUserId: string = `&user_id=${id}`;
+    return this.http.get<FlickrProfileResponse>(this.flickrUrl + this.flickrMethodProfile + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId);
+  }
+
+  // Get pictures from a user
+  getUserFeed(id: string): Observable<FlickrSearchResponse> {
+    //no CORS support: const flickrUserFeed: string = `https://www.flickr.com/services/feeds/photos_public.gne?id=${id}&format=json&nojsoncallback=1&lang=en-us`;
+    const flickrUserId: string = `&user_id=${id}`;
+    return this.http.get<FlickrSearchResponse>(this.flickrUrl + this.flickrMethodUserPics + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId + this.flickrPerPage);
   }
 }

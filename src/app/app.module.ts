@@ -8,6 +8,8 @@ import { AboutComponent } from './components/about/about.component';
 import { MainComponent } from './components/main/main.component';
 import { ImageItemComponent } from './components/image-item/image-item.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ProfileComponent } from './components/profile/profile.component';
+import { FeedItemComponent } from './components/feed-item/feed-item.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import { HttpClientModule } from '@angular/common/http';
     HeaderComponent,
     AboutComponent,
     MainComponent,
-    ImageItemComponent
+    ImageItemComponent,
+    ProfileComponent,
+    FeedItemComponent
   ],
   imports: [
     BrowserModule,
