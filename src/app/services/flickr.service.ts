@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { FlickrSearchResponse, FlickrTagResponse, FlickrProfileResponse } from '../model/FlickrModels';
+import { FlickrSearchResponse, FlickrTagResponse, FlickrProfileResponse, FlickrUsernameResponse } from '../model/FlickrModels';
 
 // The HTTP request options for the API calls
 const httpOptions = {
@@ -27,6 +27,8 @@ export class FlickrService {
   flickrMethodProfile: string = '?method=flickr.profile.getProfile';
   // Get a user's pictures method
   flickrMethodUserPics: string = '?method=flickr.people.getPublicPhotos';
+  // Method to get username
+  flickrMethodUsername: string = '?method=flickr.people.getInfo';
   // The API KEY
   flickrApiKey: string = `&api_key=${API_KEY}`;
   // Response in JSON format
@@ -71,5 +73,11 @@ export class FlickrService {
     //no CORS support: const flickrUserFeed: string = `https://www.flickr.com/services/feeds/photos_public.gne?id=${id}&format=json&nojsoncallback=1&lang=en-us`;
     const flickrUserId: string = `&user_id=${id}`;
     return this.http.get<FlickrSearchResponse>(this.flickrUrl + this.flickrMethodUserPics + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId + this.flickrPerPage);
+  }
+
+  getUsername(id: string): Observable<FlickrUsernameResponse> {
+    const flickrUserId: string = `&user_id=${id}`;
+    console.log(this.flickrUrl + this.flickrMethodUsername + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId);
+    return this.http.get<FlickrUsernameResponse>(this.flickrUrl + this.flickrMethodUsername + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId);
   }
 }

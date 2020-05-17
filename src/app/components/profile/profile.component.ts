@@ -20,9 +20,10 @@ export class ProfileComponent implements OnInit {
       this.userId = String(params['id']);
       if (this.userId) {
         this.theOwner = await this.getUser(this.userId);
+        this.theOwner.username = await this.getUsername(this.userId);
         const cb = await this.flickrService.getUserFeed(this.userId).toPromise();
         this.images = cb.photos.photo;
-        // Getting the tags & owner data (once) for each image
+        // Getting the tags for each image
         for (let img of this.images) {
           img.tags = await this.getTags(img.id);
         }
@@ -48,5 +49,9 @@ export class ProfileComponent implements OnInit {
     displayedName += theOwner.last_name ? theOwner.last_name : '';
     if (displayedName === '') return '';
     return displayedName;
+  }
+  async getUsername(id: string): Promise<string> {
+    let theResponse = await this.flickrService.getUsername(id).toPromise();
+    return theResponse.person.username._content;
   }
 }

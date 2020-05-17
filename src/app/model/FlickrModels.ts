@@ -36,6 +36,7 @@ export class FlickrProfile {
     hometown: string;
     website: string;
     city: string;
+    username: string;
 }
 // The interface to use when fetching a response from the Flickr API's Search method
 export interface FlickrSearchResponse {
@@ -59,4 +60,12 @@ export interface FlickrTagResponse {
 // The interface to use when fetching a response from the Flickr API's getListPhoto method
 export interface FlickrProfileResponse {
     profile: FlickrProfile
+}
+// The interface for getting username
+export interface FlickrUsernameResponse {
+    person: {
+        username: {
+            _content: string
+        }
+    }
 }
