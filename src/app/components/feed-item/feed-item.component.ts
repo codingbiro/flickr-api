@@ -36,14 +36,4 @@ export class FeedItemComponent implements OnInit {
 
     return theTags;
   }
-
-  displayUser(theOwner): string {
-    if (!theOwner) return '';
-    let displayedName = theOwner.first_name ? theOwner.first_name : '';
-    displayedName += theOwner.last_name ? theOwner.last_name : '';
-    if (displayedName === '') return '';
-
-    let displayedCountry = theOwner.country ? (' (' + theOwner.country + ')') : '';
-    return 'by: ' + displayedName + displayedCountry;
-  }
 }

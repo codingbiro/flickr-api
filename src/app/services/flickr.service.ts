@@ -53,7 +53,7 @@ export class FlickrService {
     return this.http.get<FlickrTagResponse>(this.flickrUrl + this.flickrMethodTags + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrPhotoId);
   }
 
-  // TODO
+  // Get a given page
   getPage(searchString: string, id: number): Observable<FlickrSearchResponse> {
     // The search's value
     const flickrSearch: string = `&text=${searchString}`;
@@ -75,6 +75,7 @@ export class FlickrService {
     return this.http.get<FlickrSearchResponse>(this.flickrUrl + this.flickrMethodUserPics + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId + this.flickrPerPage);
   }
 
+  // Get the username for a userId
   getUsername(id: string): Observable<FlickrUsernameResponse> {
     const flickrUserId: string = `&user_id=${id}`;
     console.log(this.flickrUrl + this.flickrMethodUsername + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId);

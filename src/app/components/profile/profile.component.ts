@@ -43,13 +43,16 @@ export class ProfileComponent implements OnInit {
     return theUser.profile;
   }
 
+  // Display user's name
   displayName(theOwner): string {
     if (!theOwner) return 'Loading...';
-    let displayedName = theOwner.first_name ?  theOwner.first_name : '';
+    let displayedName = theOwner.first_name ? theOwner.first_name : '';
     displayedName += theOwner.last_name ? theOwner.last_name : '';
     if (displayedName === '') return '';
     return displayedName;
   }
+
+  // Get the username
   async getUsername(id: string): Promise<string> {
     let theResponse = await this.flickrService.getUsername(id).toPromise();
     return theResponse.person.username._content;
