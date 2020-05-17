@@ -1,7 +1,15 @@
 <div class="container text-center mt-3">
-    <form class="form-inline my-2 my-lg-0 float-right pt-3">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+    <div class="card mb-4 mx-2" style="width: 100%; border:none; height: 100%;">
+            <form class="form-inline my-2 my-lg-0 pt-3" style="text-align: center; display: block!important;">
+                <input class="form-control mr-sm-2" [(ngModel)]="searchString" name="search" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0"  (click)="searchFlickr()">Search</button>
+            </form>
+    </div>
     <app-image-item *ngFor="let img of images" [img]="img"></app-image-item>
+    <h1 *ngIf="!images">
+        Loading...
+    </h1>
+    <h1 *ngIf="images && images.length === 0">
+        No results.
+    </h1>
 </div>
