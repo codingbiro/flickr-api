@@ -57,4 +57,10 @@ export class ProfileComponent implements OnInit {
     let theResponse = await this.flickrService.getUsername(id).toPromise();
     return theResponse.person.username._content;
   }
+
+  // Get favorites
+  async getFavorites(id: string): Promise<FlickrImage[]> {
+    let theResponse = await this.flickrService.getFavorites(id).toPromise();
+    return theResponse.photos.photo;
+  }
 }

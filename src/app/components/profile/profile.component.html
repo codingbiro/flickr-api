@@ -1,7 +1,7 @@
 <div class="container text-center mt-3">
     <h1> {{ displayName(theOwner) }} </h1>
     <h2> {{ theOwner ? (theOwner.username ? '@'+theOwner.username : '') : '' }} </h2>
-    <table class="table table-striped table-dark my-5" style="width: 50%; margin: auto;">
+    <table *ngIf="theOwner && (theOwner.country || theOwner.city || theOwner.hometown || theOwner.occupation || theOwner.website || theOwner.profile_description)" class="table table-striped table-dark my-5" style="width: 50%; margin: auto;">
         <tbody>
             <tr *ngIf="theOwner && theOwner.country">
                 <td>Country</td>
@@ -28,6 +28,9 @@
             </tr>
         </tbody>
     </table>
+    <div class="text-center m-4">
+        <a routerLink="favorites"><button class="btn btn-warning">Favorites</button></a>
+    </div>
     <app-feed-item *ngFor="let img of images" [img]="img"></app-feed-item>
     <h1 *ngIf="!images">
         Loading...

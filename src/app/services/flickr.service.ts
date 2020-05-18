@@ -29,6 +29,8 @@ export class FlickrService {
   flickrMethodUserPics: string = '?method=flickr.people.getPublicPhotos';
   // Method to get username
   flickrMethodUsername: string = '?method=flickr.people.getInfo';
+  // Method to get a user's favorites
+  flickrMethodFavorites: string = '?method=flickr.favorites.getPublicList';
   // The API KEY
   flickrApiKey: string = `&api_key=${API_KEY}`;
   // Response in JSON format
@@ -80,5 +82,11 @@ export class FlickrService {
     const flickrUserId: string = `&user_id=${id}`;
     console.log(this.flickrUrl + this.flickrMethodUsername + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId);
     return this.http.get<FlickrUsernameResponse>(this.flickrUrl + this.flickrMethodUsername + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId);
+  }
+
+  // Get the favorites for a userId
+  getFavorites(id: string): Observable<FlickrSearchResponse> {
+    const flickrUserId: string = `&user_id=${id}`;
+    return this.http.get<FlickrSearchResponse>(this.flickrUrl + this.flickrMethodFavorites + this.flickrApiKey + flickrUserId + this.jsonResponse + this.noJsonCb + this.flickrPerPage);
   }
 }

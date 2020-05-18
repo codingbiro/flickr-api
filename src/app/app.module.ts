@@ -10,6 +10,8 @@ import { ImageItemComponent } from './components/image-item/image-item.component
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileComponent } from './components/profile/profile.component';
 import { FeedItemComponent } from './components/feed-item/feed-item.component';
+import { FavoritesComponent } from './components/favorites/favorites.component';
+import { TagsComponent } from './components/tags/tags.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { FeedItemComponent } from './components/feed-item/feed-item.component';
     MainComponent,
     ImageItemComponent,
     ProfileComponent,
-    FeedItemComponent
+    FeedItemComponent,
+    FavoritesComponent,
+    TagsComponent
   ],
   imports: [
     BrowserModule,
