@@ -1,1 +1,10 @@
-<p>tags works!</p>
+<div class="container text-center mt-3">
+    <h2 class="mb-3"> Images for #{{ name }} </h2>
+    <app-image-item *ngFor="let img of images" [img]="img"></app-image-item>
+    <h1 *ngIf="!images">
+        Loading...
+    </h1>
+    <h1 *ngIf="images && images.length === 0">
+        No result.
+    </h1>
+</div>

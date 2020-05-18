@@ -55,15 +55,6 @@ export class FlickrService {
     return this.http.get<FlickrTagResponse>(this.flickrUrl + this.flickrMethodTags + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrPhotoId);
   }
 
-  // Get a given page
-  getPage(searchString: string, id: number): Observable<FlickrSearchResponse> {
-    // The search's value
-    const flickrSearch: string = `&text=${searchString}`;
-    // The page
-    const flickrPage: string = `&page=${id}`;
-    return this.http.get<FlickrSearchResponse>(this.flickrUrl + this.flickrMethodSearch + this.flickrApiKey + flickrSearch + this.jsonResponse + this.noJsonCb + this.flickrPerPage + flickrPage);
-  }
-
   // Get profile data for a user
   getProfileData(id: string): Observable<FlickrProfileResponse> {
     const flickrUserId: string = `&user_id=${id}`;
@@ -75,6 +66,15 @@ export class FlickrService {
     //no CORS support: const flickrUserFeed: string = `https://www.flickr.com/services/feeds/photos_public.gne?id=${id}&format=json&nojsoncallback=1&lang=en-us`;
     const flickrUserId: string = `&user_id=${id}`;
     return this.http.get<FlickrSearchResponse>(this.flickrUrl + this.flickrMethodUserPics + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId + this.flickrPerPage);
+  }
+
+  // Get a given page on userfeed
+  getUserFeedPage(userId: string, page: number): Observable<FlickrSearchResponse> {
+    // The search's value
+    const flickrUserId: string = `&user_id=${userId}`;
+    // The page
+    const flickrPage: string = `&page=${page}`;
+    return this.http.get<FlickrSearchResponse>(this.flickrUrl + this.flickrMethodSearch + this.flickrApiKey + flickrUserId + this.jsonResponse + this.noJsonCb + this.flickrPerPage + flickrPage);
   }
 
   // Get the username for a userId

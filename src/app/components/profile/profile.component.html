@@ -36,6 +36,10 @@
         Loading...
     </h1>
     <h1 *ngIf="images && images.length === 0">
-        No results.
+        No result.
     </h1>
+    <div class="m-3">
+        <button *ngIf="images && images.length !== 0 && pageno !== 1" class="btn btn-secondary m-3" (click)="Prevpage()">Previous page</button>
+        <button *ngIf="images && images.length !== 0 && pageno !== 5 && images.length === 66" class="m-3 btn btn-secondary" (click)="Nextpage()">Next page</button>
+    </div>
 </div>

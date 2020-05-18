@@ -2,6 +2,8 @@
     <img src="{{ getURI() }}" class="card-img-top" alt="...">
     <div class="card-body">
         <h5 class="card-title"> {{ img.title }} </h5>
-        <div *ngIf="img.tags" [innerHTML]="getTags()"> </div>
+        <div *ngIf="img && img.tags && img.tags.length > 0">
+            <a *ngFor="let tag of img.tags | slice:0:6" routerLink="/tag/{{tag.raw}}"><span class="badge badge-secondary mx-1">#{{tag.raw}}</span></a>
+        </div>
     </div>
 </div>

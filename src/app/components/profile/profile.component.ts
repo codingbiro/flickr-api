@@ -12,11 +12,13 @@ export class ProfileComponent implements OnInit {
   userId: string;
   images: FlickrImage[];
   theOwner: FlickrProfile;
+  pageno: number;
 
   constructor(private route: ActivatedRoute, private flickrService: FlickrService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(async (params) => {
+      this.pageno = 1;
       this.userId = String(params['id']);
       if (this.userId) {
         this.theOwner = await this.getUser(this.userId);
@@ -62,5 +64,27 @@ export class ProfileComponent implements OnInit {
   async getFavorites(id: string): Promise<FlickrImage[]> {
     let theResponse = await this.flickrService.getFavorites(id).toPromise();
     return theResponse.photos.photo;
+  }
+
+  // Go to next page
+  async Nextpage() {
+    this.pageno++;
+    const cb = await this.flickrService.getUserFeedPage(this.userId, this.pageno).toPromise();
+    this.images = cb.photos.photo;
+    // Getting the tags for each image
+    for (let img of this.images) {
+      img.tags = await this.getTags(img.id);
+    }
+  }
+
+  // Go to previous page
+  async Prevpage() {
+    this.pageno--;
+    const cb = await this.flickrService.getUserFeedPage(this.userId, this.pageno).toPromise();
+    this.images = cb.photos.photo;
+    // Getting the tags for each image
+    for (let img of this.images) {
+      img.tags = await this.getTags(img.id);
+    }
   }
 }

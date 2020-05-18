@@ -3,7 +3,9 @@
     <div class="card-body">
         <h5 class="card-title"> {{ img.title }} </h5>
         <h6> {{ displayUser(img.theOwner) }} </h6>
-        <div *ngIf="img.tags" [innerHTML]="getTags()"> </div>
+        <div *ngIf="img && img.tags && img.tags.length > 0">
+            <a *ngFor="let tag of img.tags | slice:0:6" routerLink="/tag/{{tag.raw}}"><span class="badge badge-secondary mx-1">#{{tag.raw}}</span></a>
+        </div>
         <a routerLink="/people/{{ img.owner }}"><button class="btn btn-primary mt-2">Owner's profile</button></a>
     </div>
 </div>
