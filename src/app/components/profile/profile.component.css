@@ -1,0 +1,14 @@
+.profile-mySpinner {
+    width: 3rem;
+    height: 3rem;
+    font-size: .8rem;
+}
+
+.profile-myTable {
+    width: 50%;
+    margin: auto;
+}
+
+.profile-myForm {
+    width: 15%;
+}

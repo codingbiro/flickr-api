@@ -1,0 +1,11 @@
+.main-mySearch {
+    width: 100%;
+    border: none;
+    height: 100%;
+}
+
+.main-mySpinner {
+    width: 3rem;
+    height: 3rem;
+    font-size: .8rem;
+}

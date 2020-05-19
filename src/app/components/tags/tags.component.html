@@ -2,7 +2,9 @@
     <h2 class="mb-3"> Images for #{{ name }} </h2>
     <app-image-item *ngFor="let img of images" [img]="img"></app-image-item>
     <h1 *ngIf="!images">
-        Loading...
+        <div class="spinner-border mySpinner" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     </h1>
     <h1 *ngIf="images && images.length === 0">
         No result.

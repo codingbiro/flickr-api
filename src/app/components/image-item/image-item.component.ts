@@ -19,6 +19,7 @@ export class ImageItemComponent implements OnInit {
     return `https://farm${this.img.farm}.staticflickr.com/${this.img.server}/${this.img.id}_${this.img.secret}.jpg`;
   }
 
+  // Display the user :::pretty
   displayUser(theOwner): string {
     if (!theOwner) return '';
     let displayedName = theOwner.first_name ? theOwner.first_name : '';

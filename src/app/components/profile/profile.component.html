@@ -3,7 +3,7 @@
     <h2> {{ theOwner ? (theOwner.username ? '@'+theOwner.username : '') : '' }} </h2>
     <table
         *ngIf="theOwner && (theOwner.country || theOwner.city || theOwner.hometown || theOwner.occupation || theOwner.website || theOwner.profile_description)"
-        class="table table-striped table-dark my-5" style="width: 50%; margin: auto;">
+        class="table table-striped table-dark my-5 profile-myTable">
         <tbody>
             <tr *ngIf="theOwner && theOwner.country">
                 <td>Country</td>
@@ -32,7 +32,7 @@
     </table>
     <div class="text-center m-4">
         <a routerLink="favorites"><button class="btn btn-warning mb-3"><i class="far fa-star mr-1"></i>Favorites</button></a>
-        <select class="form-control m-auto" style="width: 15%;" (change)="onPPChange($event.target.value)">
+        <select class="form-control m-auto profile-myForm" (change)="onPPChange($event.target.value)">
             <option value="21" selected="{{perPage === 21 ? 'selected' : ''}}">21 /page</option>
             <option value="42" selected="{{perPage === 42 ? 'selected' : ''}}">42 /page</option>
             <option value="66" selected="{{perPage === 66 ? 'selected' : ''}}">66 /page</option>
@@ -40,7 +40,9 @@
     </div>
     <app-feed-item *ngFor="let img of images" [img]="img"></app-feed-item>
     <h1 *ngIf="!images">
-        Loading...
+        <div class="spinner-border profile-mySpinner" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     </h1>
     <h1 *ngIf="images && images.length === 0">
         No result.

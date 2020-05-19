@@ -1,8 +1,7 @@
-import { Component, OnInit, ɵangular_packages_core_core_bb } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FlickrService } from 'src/app/services/flickr.service';
-import { FlickrImage, FlickrTag, FlickrProfile } from 'src/app/model/FlickrModels';
-import { getNumberOfCurrencyDigits } from '@angular/common';
+import { FlickrImage, FlickrProfile } from 'src/app/model/FlickrModels';
 
 @Component({
   selector: 'app-profile',
@@ -19,15 +18,18 @@ export class ProfileComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private flickrService: FlickrService) { }
 
+  // onInit
   ngOnInit(): void {
     this.route.params.subscribe(async (params) => {
+      // Def values
       this.pageno = 1;
       this.perPage = 66;
+      // Get URL param
       this.userId = String(params['id']);
       if (this.userId) {
-        this.theOwner = await this.getUser(this.userId);
-        this.theOwner.username = await this.getUsername(this.userId);
-        await this.getImgs();
+        // Get user's data and images
+        this.getUser(this.userId);
+        this.getImgs();
       }
     });
   }
@@ -35,24 +37,30 @@ export class ProfileComponent implements OnInit {
   // Get the images and their tags
   async getImgs() {
     this.isNext = await this.calcIsNext();
-    const cb = await this.flickrService.getUserFeedPage(this.userId, this.pageno, this.perPage).toPromise();
-    this.images = cb.photos.photo;
-    // Getting the tags for each image
+    this.flickrService.getUserFeedPage(this.userId, this.pageno, this.perPage).subscribe(data => {
+      this.images = data.photos.photo;
+      this.getTags();
+    });
+  }
+
+  // Getting the tags for each image
+  getTags() {
     for (let img of this.images) {
-      img.tags = await this.getTags(img.id);
+      // Get tags for a given Image
+      this.flickrService.getTags(img.id).subscribe(data => {
+        img.tags = data.photo.tags.tag;
+      });
     }
   }
 
-  // Get tags for a given Image
-  async getTags(id: number): Promise<FlickrTag[]> {
-    let theTags = await this.flickrService.getTags(id).toPromise();
-    return theTags.photo.tags.tag;
-  }
-
   // Get user's data for a given id
-  async getUser(id: string): Promise<FlickrProfile> {
-    let theUser = await this.flickrService.getProfileData(id).toPromise();
-    return theUser.profile;
+  async getUser(id: string) {
+    this.flickrService.getProfileData(id).subscribe(data => {
+      this.theOwner = data.profile;
+      this.flickrService.getUsername(id).subscribe(uname => {
+        this.theOwner.username = uname.person.username._content;
+      });
+    });
   }
 
   // Display user's name
@@ -64,40 +72,17 @@ export class ProfileComponent implements OnInit {
     return displayedName;
   }
 
-  // Get the username
-  async getUsername(id: string): Promise<string> {
-    let theResponse = await this.flickrService.getUsername(id).toPromise();
-    return theResponse.person.username._content;
-  }
-
-  // Get favorites
-  async getFavorites(id: string): Promise<FlickrImage[]> {
-    let theResponse = await this.flickrService.getFavorites(id).toPromise();
-    return theResponse.photos.photo;
-  }
-
   // Go to next page
   async Nextpage() {
     this.pageno++;
-    const cb = await this.flickrService.getUserFeedPage(this.userId, this.pageno, this.perPage).toPromise();
-    this.images = cb.photos.photo;
-    // Getting the tags for each image
-    for (let img of this.images) {
-      img.tags = await this.getTags(img.id);
-    }
-    this.isNext = await this.calcIsNext();
+    this.getImgs();
   }
 
   // Go to previous page
   async Prevpage() {
     this.pageno--;
+    this.getImgs();
     this.isNext = true;
-    const cb = await this.flickrService.getUserFeedPage(this.userId, this.pageno, this.perPage).toPromise();
-    this.images = cb.photos.photo;
-    // Getting the tags for each image
-    for (let img of this.images) {
-      img.tags = await this.getTags(img.id);
-    }
   }
 
   // Returns if the current page is last or not by checking the next page's size
@@ -107,11 +92,14 @@ export class ProfileComponent implements OnInit {
     return nextImagesLength !== 0;
   }
 
+  // If per page has changed, set the new number
   onPPChange(value: number) {
     this.setPerPage(value);
+    // And go to page 1
     this.pageno = 1;
   }
 
+  // Get the images with the new perPage number
   setPerPage(newPerPage: number) {
     this.perPage = newPerPage;
     this.getImgs();

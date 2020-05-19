@@ -33,7 +33,6 @@ export class FeedItemComponent implements OnInit {
         counter++;
       }
     }
-
     return theTags;
   }
 }

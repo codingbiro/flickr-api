@@ -1,14 +1,16 @@
 <div class="container text-center mt-3">
-    <div class="card mb-4 mx-2" style="width: 100%; border:none; height: 100%;">
-        <form class="form-inline my-2 my-lg-0 pt-3" style="text-align: center; display: block!important;">
+    <div class="card mb-4 mx-2 main-mySearch">
+        <form class="form-inline my-2 my-lg-0 pt-3 text-center d-block">
             <input class="form-control mr-sm-2" [(ngModel)]="searchString" name="search" type="search"
                 placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" (click)="searchFlickr()">Search</button>
+            <button class="btn btn-outline-success my-2 my-sm-0" (click)="searchFlickr()">Search<i class="fas fa-search ml-2"></i></button>
         </form>
     </div>
     <app-image-item *ngFor="let img of images" [img]="img"></app-image-item>
     <h1 *ngIf="!images">
-        Loading...
+        <div class="spinner-border main-mySpinner" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     </h1>
     <h1 *ngIf="images && images.length === 0">
         No result.

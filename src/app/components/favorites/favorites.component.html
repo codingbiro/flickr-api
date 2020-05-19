@@ -1,11 +1,13 @@
 <div class="container text-center mt-3">
     <h2> Favorites by @{{ username }} </h2>
     <div class="text-center m-3">
-        <a routerLink="/people/{{userId}}"><button class="btn btn-success">Back to profile</button></a>
+        <a routerLink="/people/{{userId}}"><button class="btn btn-success"><i class="fas fa-backspace mr-2"></i>Back to profile</button></a>
     </div>
     <app-feed-item *ngFor="let img of favorites" [img]="img"></app-feed-item>
     <h1 *ngIf="!favorites">
-        Loading...
+        <div class="spinner-border fav-mySpinner" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     </h1>
     <h1 *ngIf="favorites && favorites.length === 0">
         No result.
