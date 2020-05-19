@@ -12,4 +12,10 @@
     <h1 *ngIf="favorites && favorites.length === 0">
         No result.
     </h1>
+    <div class="m-3">
+        <button *ngIf="favorites && favorites.length !== 0 && pageno !== 1" class="btn btn-secondary m-3"
+            (click)="Prevpage()"><i class="fas fa-chevron-left mr-1"></i>Previous page</button>
+        <button *ngIf="favorites && favorites.length !== 0 && isNext" class="m-3 btn btn-secondary" (click)="Nextpage()">Next
+            page<i class="fas fa-chevron-right ml-1"></i></button>
+    </div>
 </div>

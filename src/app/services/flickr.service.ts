@@ -82,13 +82,17 @@ export class FlickrService {
 
   // Get the username for a userId
   getUsername(id: string): Observable<FlickrUsernameResponse> {
+    // The userId
     const flickrUserId: string = `&user_id=${id}`;
     return this.http.get<FlickrUsernameResponse>(this.flickrUrl + this.flickrMethodUsername + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId);
   }
 
   // Get the favorites for a userId
-  getFavorites(id: string): Observable<FlickrSearchResponse> {
+  getFavorites(id: string, pageno: number): Observable<FlickrSearchResponse> {
+    // The page
+    const flickrPage: string = `&page=${pageno}`;
+    // The userId
     const flickrUserId: string = `&user_id=${id}`;
-    return this.http.get<FlickrSearchResponse>(this.flickrUrl + this.flickrMethodFavorites + this.flickrApiKey + flickrUserId + this.jsonResponse + this.noJsonCb + this.flickrPerPage);
+    return this.http.get<FlickrSearchResponse>(this.flickrUrl + this.flickrMethodFavorites + this.flickrApiKey + flickrUserId + this.jsonResponse + this.noJsonCb + this.flickrPerPage + flickrPage);
   }
 }
