@@ -11,6 +11,7 @@ const httpOptions = {
 };
 // The API key from Flickr
 const API_KEY: string = 'f2f9b6954909b0f8dc9fc1608ed39272';
+// Default number of images per page
 const IMAGES_PER_PAGE: number = 66;
 
 @Injectable({
@@ -69,18 +70,19 @@ export class FlickrService {
   }
 
   // Get a given page on userfeed
-  getUserFeedPage(userId: string, page: number): Observable<FlickrSearchResponse> {
+  getUserFeedPage(userId: string, page: number, customPerPage: number): Observable<FlickrSearchResponse> {
     // The search's value
     const flickrUserId: string = `&user_id=${userId}`;
     // The page
     const flickrPage: string = `&page=${page}`;
-    return this.http.get<FlickrSearchResponse>(this.flickrUrl + this.flickrMethodSearch + this.flickrApiKey + flickrUserId + this.jsonResponse + this.noJsonCb + this.flickrPerPage + flickrPage);
+    // Images per page
+    const perPage: string = `&per_page=${customPerPage}`;
+    return this.http.get<FlickrSearchResponse>(this.flickrUrl + this.flickrMethodSearch + this.flickrApiKey + flickrUserId + this.jsonResponse + this.noJsonCb + perPage + flickrPage);
   }
 
   // Get the username for a userId
   getUsername(id: string): Observable<FlickrUsernameResponse> {
     const flickrUserId: string = `&user_id=${id}`;
-    console.log(this.flickrUrl + this.flickrMethodUsername + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId);
     return this.http.get<FlickrUsernameResponse>(this.flickrUrl + this.flickrMethodUsername + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId);
   }
 

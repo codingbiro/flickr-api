@@ -2,6 +2,7 @@ import { Component, OnInit, ɵangular_packages_core_core_bb } from '@angular/cor
 import { ActivatedRoute } from '@angular/router';
 import { FlickrService } from 'src/app/services/flickr.service';
 import { FlickrImage, FlickrTag, FlickrProfile } from 'src/app/model/FlickrModels';
+import { getNumberOfCurrencyDigits } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
@@ -13,24 +14,33 @@ export class ProfileComponent implements OnInit {
   images: FlickrImage[];
   theOwner: FlickrProfile;
   pageno: number;
+  perPage: number;
+  isNext: boolean;
 
   constructor(private route: ActivatedRoute, private flickrService: FlickrService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(async (params) => {
       this.pageno = 1;
+      this.perPage = 66;
       this.userId = String(params['id']);
       if (this.userId) {
         this.theOwner = await this.getUser(this.userId);
         this.theOwner.username = await this.getUsername(this.userId);
-        const cb = await this.flickrService.getUserFeed(this.userId).toPromise();
-        this.images = cb.photos.photo;
-        // Getting the tags for each image
-        for (let img of this.images) {
-          img.tags = await this.getTags(img.id);
-        }
+        await this.getImgs();
       }
     });
+  }
+
+  // Get the images and their tags
+  async getImgs() {
+    this.isNext = await this.calcIsNext();
+    const cb = await this.flickrService.getUserFeedPage(this.userId, this.pageno, this.perPage).toPromise();
+    this.images = cb.photos.photo;
+    // Getting the tags for each image
+    for (let img of this.images) {
+      img.tags = await this.getTags(img.id);
+    }
   }
 
   // Get tags for a given Image
@@ -69,7 +79,20 @@ export class ProfileComponent implements OnInit {
   // Go to next page
   async Nextpage() {
     this.pageno++;
-    const cb = await this.flickrService.getUserFeedPage(this.userId, this.pageno).toPromise();
+    const cb = await this.flickrService.getUserFeedPage(this.userId, this.pageno, this.perPage).toPromise();
+    this.images = cb.photos.photo;
+    // Getting the tags for each image
+    for (let img of this.images) {
+      img.tags = await this.getTags(img.id);
+    }
+    this.isNext = await this.calcIsNext();
+  }
+
+  // Go to previous page
+  async Prevpage() {
+    this.pageno--;
+    this.isNext = true;
+    const cb = await this.flickrService.getUserFeedPage(this.userId, this.pageno, this.perPage).toPromise();
     this.images = cb.photos.photo;
     // Getting the tags for each image
     for (let img of this.images) {
@@ -77,14 +100,20 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  // Go to previous page
-  async Prevpage() {
-    this.pageno--;
-    const cb = await this.flickrService.getUserFeedPage(this.userId, this.pageno).toPromise();
-    this.images = cb.photos.photo;
-    // Getting the tags for each image
-    for (let img of this.images) {
-      img.tags = await this.getTags(img.id);
-    }
+  // Returns if the current page is last or not by checking the next page's size
+  async calcIsNext(): Promise<boolean> {
+    const cb = await this.flickrService.getUserFeedPage(this.userId, this.pageno + 1, this.perPage).toPromise();
+    let nextImagesLength = cb.photos.photo.length;
+    return nextImagesLength !== 0;
+  }
+
+  onPPChange(value: number) {
+    this.setPerPage(value);
+    this.pageno = 1;
+  }
+
+  setPerPage(newPerPage: number) {
+    this.perPage = newPerPage;
+    this.getImgs();
   }
 }
