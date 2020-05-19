@@ -64,7 +64,6 @@ export class FlickrService {
 
   // Get pictures from a user
   getUserFeed(id: string): Observable<FlickrSearchResponse> {
-    //no CORS support: const flickrUserFeed: string = `https://www.flickr.com/services/feeds/photos_public.gne?id=${id}&format=json&nojsoncallback=1&lang=en-us`;
     const flickrUserId: string = `&user_id=${id}`;
     return this.http.get<FlickrSearchResponse>(this.flickrUrl + this.flickrMethodUserPics + this.flickrApiKey + this.jsonResponse + this.noJsonCb + flickrUserId + this.flickrPerPage);
   }
